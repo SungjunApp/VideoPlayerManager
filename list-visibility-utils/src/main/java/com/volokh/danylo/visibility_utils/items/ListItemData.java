@@ -42,7 +42,10 @@ public class ListItemData {
     }
 
     public int getVisibilityPercents(List<? extends ListItem> listItems) {
-        int visibilityPercents = listItems.get(getIndex()).getVisibilityPercents(getView());
+        View view = getView();
+        if (view == null)
+            return 0;
+        int visibilityPercents = listItems.get(getIndex()).getVisibilityPercents(view);
         if (SHOW_LOGS)
             Logger.v(TAG, "getVisibilityPercents, visibilityPercents " + visibilityPercents);
         return visibilityPercents;
