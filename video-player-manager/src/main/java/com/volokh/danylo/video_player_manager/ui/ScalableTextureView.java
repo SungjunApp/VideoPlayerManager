@@ -36,7 +36,7 @@ public abstract class ScalableTextureView extends TextureView{
     private ScaleType mScaleType;
 
     public enum ScaleType {
-        CENTER_CROP, TOP, BOTTOM, FILL
+        CENTER_CROP, TOP, BOTTOM, FILL, FIT_CENTER
     }
 
     public ScalableTextureView(Context context) {
@@ -90,6 +90,7 @@ public abstract class ScalableTextureView extends TextureView{
         float scaleY = 1.0f;
 
         switch (mScaleType) {
+            case FIT_CENTER:
             case FILL:
                 if (viewWidth > viewHeight) {   // device in landscape
                     scaleX = (viewHeight * contentWidth) / (viewWidth * contentHeight);
@@ -133,6 +134,7 @@ public abstract class ScalableTextureView extends TextureView{
                 pivotPointX = viewWidth;
                 pivotPointY = viewHeight;
                 break;
+            case FIT_CENTER:
             case CENTER_CROP:
                 pivotPointX = viewWidth / 2;
                 pivotPointY = viewHeight / 2;
@@ -149,6 +151,7 @@ public abstract class ScalableTextureView extends TextureView{
 
         float fitCoef = 1;
         switch (mScaleType) {
+            case FIT_CENTER:
             case FILL:
                 break;
             case BOTTOM:
