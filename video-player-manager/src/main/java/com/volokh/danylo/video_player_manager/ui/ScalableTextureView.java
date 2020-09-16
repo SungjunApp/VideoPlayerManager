@@ -5,7 +5,6 @@ import android.graphics.Matrix;
 import android.util.AttributeSet;
 import android.view.TextureView;
 
-import com.volokh.danylo.video_player_manager.Config;
 import com.volokh.danylo.video_player_manager.utils.Logger;
 
 /**
@@ -102,9 +101,11 @@ public abstract class ScalableTextureView extends TextureView{
             case CENTER_CROP:
             case TOP:
                 if (contentWidth > viewWidth && contentHeight > viewHeight) {
+                    // content is larger then view
                     scaleX = contentWidth / viewWidth;
                     scaleY = contentHeight / viewHeight;
                 } else if (contentWidth < viewWidth && contentHeight < viewHeight) {
+                    // content is smaller then view
                     scaleY = viewWidth / contentWidth;
                     scaleX = viewHeight / contentHeight;
                 } else if (viewWidth > contentWidth) {
@@ -115,9 +116,9 @@ public abstract class ScalableTextureView extends TextureView{
                 break;
         }
 
-        if (SHOW_LOGS) {
-            Logger.v(TAG, "updateTextureViewSize, scaleX " + scaleX + ", scaleY " + scaleY);
-        }
+        if (SHOW_LOGS) Logger.v(TAG, "updateTextureViewSize, scaleX " + scaleX + ", scaleY " + scaleY);
+
+
 
         // Calculate pivot points, in our case crop from center
         float pivotPointX;
@@ -144,8 +145,7 @@ public abstract class ScalableTextureView extends TextureView{
                 throw new IllegalStateException("pivotPointX, pivotPointY for ScaleType " + mScaleType + " are not defined");
         }
 
-        if (SHOW_LOGS)
-            Logger.v(TAG, "updateTextureViewSize, pivotPointX " + pivotPointX + ", pivotPointY " + pivotPointY);
+        if (SHOW_LOGS) Logger.v(TAG, "updateTextureViewSize, pivotPointX " + pivotPointX + ", pivotPointY " + pivotPointY);
 
         float fitCoef = 1;
         switch (mScaleType) {
@@ -154,7 +154,7 @@ public abstract class ScalableTextureView extends TextureView{
             case BOTTOM:
             case CENTER_CROP:
             case TOP:
-                if (mContentHeight > mContentWidth) { //Portrait video
+                if (mContentHeight >= mContentWidth) { //Portrait video
                     fitCoef = viewWidth / (viewWidth * scaleX);
                 } else { //Landscape video
                     fitCoef = viewHeight / (viewHeight * scaleY);
@@ -164,7 +164,7 @@ public abstract class ScalableTextureView extends TextureView{
 
         mContentScaleX = fitCoef * scaleX;
         mContentScaleY = fitCoef * scaleY;
-
+        if (SHOW_LOGS) Logger.v(TAG, "updateTextureViewSize, mContentScaleX " + mContentScaleX + ", mContentScaleY " + mContentScaleY);
         mPivotPointX = pivotPointX;
         mPivotPointY = pivotPointY;
 
